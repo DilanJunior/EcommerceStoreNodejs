@@ -1,0 +1,38 @@
+.ad-banner {
+    position: relative;
+    width: 100%;
+    
+    background: url('https://your-image-url.com/your-background-image.jpg') no-repeat center center/cover;
+    display: flex;
+    
+    justify-content: center;
+   
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+
+}
+
+.ad-banner {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+  }
+
+
+
+.ad {
+   /*  background-color: rgba(255, 255, 255, 0.2);
+    */ width: 100%;
+    position: relative;
+  }
+  
+
+.ad-image {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    
+   
+}
+
+
