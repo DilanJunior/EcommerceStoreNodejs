@@ -1,6 +1,5 @@
 // routes/products.js
 import express from 'express';
-
 import { getProducts, getProductById, createProduct} from '../controllers/ProductController.js'
 import multer from 'multer';
 import path from 'path';
