@@ -9,24 +9,16 @@ import AdBanner from "./components/AdBanner";
 function App() {
   return (
     <>
+      <Header />
 
-    <OffcanvasExample />
-
-    <AdBanner />
-    
-      
       <BrowserRouter>
-       
         <Routes>
           <Route path="/" element={<ProductList />} />
           <Route path="/products" element={<ProductList />} />
         </Routes>
       </BrowserRouter>
 
-
-     <ProductForm /> 
-
-
+      {/* <ProductForm /> */}
     </>
   );
 }
