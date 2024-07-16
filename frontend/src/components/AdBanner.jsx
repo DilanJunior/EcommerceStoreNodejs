@@ -23,18 +23,19 @@ const AdBanner = () => {
       image: "https://via.placeholder.com/800x400", // URL de imagen válida
     }] 
 
-    const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 3000,
-    };
+     const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: false
+  };
     
     return (
-      <div className="ad-banner">
+      <div className="ad-banner z-0">
       <Slider {...settings}>
         {ads.map((ad) => (
           <div key={ad.id} className="ad relative w-full">

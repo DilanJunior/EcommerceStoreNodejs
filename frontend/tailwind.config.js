@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+      playfair: ['"Playfair Display"', 'serif'],  // Añade la fuente aquí
+    },
+  },
   },
   "editor.quickSuggestions": {
   "strings": "on"
