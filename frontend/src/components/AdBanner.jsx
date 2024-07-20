@@ -8,14 +8,12 @@ const AdBanner = () => {
       id: 1,
       title: "Ad 1",
       description: "This is the first ad",
-      image: "https://images.krisshop.com/cms/cj6qgDr7lCCEUcHJPxgKwmgNXMgp3afUD4yjUKzyHzA/0x0/bWVkaWEvZ2VuZS1jbXMvMS81LzE1MzYteC03MDAtX3dpdGgtc2hvcC1ub3dfLmpwZw", // URL de imagen válida
-    },
+      image: "https://via.placeholder.com/800x400"    },
     {
       id: 2,
       title: "Ad 2",
       description: "This is the second ad",
-      image: "https://images.krisshop.com/cms/oVlck-0keK9fnaEVuu-rdbrrysNPxoKaINDMTAgeuy0/1536x/bWVkaWEvZ2VuZS1jbXMvMC83LzA3MjRfYXRvbWUtMTUzNHg4NjRfMS5qcGc", // URL de imagen válida
-    },
+      image: "https://via.placeholder.com/800x400"   },
     {
       id: 3,
       title: "Ad 3",
@@ -35,19 +33,52 @@ const AdBanner = () => {
   };
     
     return (
-      <div className="ad-banner z-0">
-      <Slider {...settings}>
-        {ads.map((ad) => (
-          <div key={ad.id} className="ad relative w-full">
-            <img src={ad.image} alt={ad.title} className="ad-image w-full h-64 object-cover" />
-            <div className="carousel-caption absolute bottom-0 bg-black bg-opacity-50 w-full text-white p-2">
-              <h3 className="text-lg font-bold">{ad.title}</h3>
-              <p className="text-sm">{ad.description}</p>
-            </div>
+      <div className="flex flex-col md:flex-row md:justify-around items-center md:m-5">
+        
+  <div className="ad-banner z-0 w-full md:w-3/5  mb-4 rounded-lg">
+    <Slider {...settings} className="rounded-lg">
+      {ads.map((ad) => (
+        <div key={ad.id} className="ad relative w-full">
+          <img src={ad.image} alt={ad.title} className="ad-image w-full h-64 object-cover" />
+          <div className="carousel-caption absolute bottom-0 bg-black bg-opacity-50 w-full text-white p-2">
+            <h3 className="text-lg font-bold">{ad.title}</h3>
+            <p className="text-sm">{ad.description}</p>
           </div>
-        ))}
-      </Slider>
-    </div>)
-};
+        </div>
+      ))}
+    </Slider>
+  </div>
+
+  <div className=" p-4 w-full md:w-4/12">
+    <div>
+      <h1 className="text-white text-2xl font-playfair">Bienvenido a Bisutería Jacky</h1>
+      <p className="text-gray-300 mb-2 font-extralight">Ofrecemos una variedad de piezas elegantes y modernas, perfectas para cualquier ocasión, desde eventos formales hasta el día a día.</p>
+      </div>
+
+      
+      <div className="">
+  <ul className="flex flex-wrap gap-4">
+    <li className="bg-slate-400 p-1.5 rounded-xl">
+      <a href="#" className="text-black font-semibold">🎉 Nuevos productos</a>
+    </li>
+    <li className="bg-slate-400 p-1.5 rounded-xl">
+      <a href="#" className="text-black font-semibold">🔥 Promociones actuales</a>
+    </li>
+    <li className="bg-slate-400 p-1.5 rounded-xl">
+      <a href="#" className="text-black font-semibold">💌 Suscríbete a nuestro boletín</a>
+    </li>
+    <li className="bg-slate-400 p-1.5 rounded-xl">
+      <a href="#" className="text-black font-semibold">📅 Próximos eventos</a>
+    </li>
+    <li className="bg-slate-400 p-1.5 rounded-xl">
+      <a href="#" className="text-black font-semibold">⭐ Opiniones de clientes</a>
+    </li>
+  </ul>
+</div>
+
+
+  </div>
+</div>
+    )};
 
 export default AdBanner;

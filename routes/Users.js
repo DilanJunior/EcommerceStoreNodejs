@@ -3,7 +3,7 @@ import User from "../models/Userdb.js";
 import pkg from "argon2";
 const { argon2 } = pkg;
 import { register, login, logout , getUserProfile} from "../controllers/authController.js";
-import {authRequire} from "../middleware/validatetoken.js"
+import {authMidlleware} from "../middleware/validatetoken.js"
 
 const router = express.Router();
 
@@ -19,6 +19,6 @@ router.get("/", async (req, res) => {
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
-router.get("/profile", authRequire , getUserProfile);
+router.get("/profile", authMidlleware , getUserProfile);
 
 export default router;

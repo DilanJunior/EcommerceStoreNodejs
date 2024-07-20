@@ -11,12 +11,13 @@ function App() {
     <>
       <Header />
 
-      <BrowserRouter>
+   {/*    <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ProductList />} />
-          <Route path="/products" element={<ProductList />} />
+          <Route path="/" 
+           />
+          <Route path="/products" />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
 
       {/* <ProductForm /> */}
     </>
