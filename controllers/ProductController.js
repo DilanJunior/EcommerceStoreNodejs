@@ -1,6 +1,8 @@
 import express from "express";
 import Product from "../models/Product.js";
 
+
+
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -12,13 +14,19 @@ export const getProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   const { name, price, description } = req.body;
-  const imageUrl = req.file ? req.file.path : "";
+  const imageUrl = req.file ? req.file.filename : "";
+  console.log(req.file)
+  
+  if (!name ||!price ||!description) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
 
   const product = new Product({
     name,
     price,
     description,
-    imageUrl,
+    imageUrl, 
   });
 
   try {

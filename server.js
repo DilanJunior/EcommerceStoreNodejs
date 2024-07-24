@@ -6,23 +6,29 @@ import ProductRoutes from "./routes/Products.js";
 import UserRoutes from "./routes/Users.js";
 import cors from "cors";
 import CartRoutes from "./routes/Cart.js";
+import chalk from "chalk";
+
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.json()); // Para manejar cuerpos de solicitud JSON
-app.use("/uploads", express.static("uploads")); // Servir imágenes estáticamente
+console.log(__dirname);
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // URL del frontend con Vite
+    origin: "*", // URL del frontend con Vite
     methods: "GET,POST,PUT,DELETE", // Métodos permitidos
     allowedHeaders: "Content-Type,Authorization", // Cabeceras permitidas
   })
 );
+
+app.use("/uploads/", express.static(path.join(__dirname, "uploads")));
 
 // Conectar a MongoDB
 mongoose
@@ -30,7 +36,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Database connected!"))
+  .then(() => console.log(chalk.blue("Database connected!")))
   .catch((err) => console.log(err));
 
 // Rutas
@@ -40,12 +46,10 @@ app.get("/api/", (req, res) => {
 });
 
 app.use("/api/products/", ProductRoutes); // Montar las rutas de productos
-
 app.use("/api/users/", UserRoutes); // Montar las rutas de usuarios
-app.use("/api/cart/", CartRoutes); 
-
+app.use("/api/cart/", CartRoutes);
 
 app.listen(PORT, (err) => {
-  if (err) console.log("Error al iniciar el servidor:", err);
-  else console.log(`Server is running on port ${PORT}`);
+  if (err) console.log(chalk.red("Error al iniciar el servidor:", err));
+  else console.log(chalk.green(`Server is running on port ${PORT}`));
 });

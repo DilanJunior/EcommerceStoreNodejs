@@ -6,10 +6,11 @@ import path from 'path';
 
 const router = express.Router();
 
+
 // Configuración de Multer para manejar la carga de archivos
  const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Directorio donde se guardarán las imágenes
+    cb(null, 'uploads/'); 
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname); // Renombrar archivo para evitar colisiones
@@ -18,11 +19,9 @@ const router = express.Router();
 
 const upload = multer({ storage: storage }); 
 
-
+// ENDPOINT
 router.get('/', getProducts)
-
 router.post('/', upload.single('image'), createProduct) 
-
 router.get('/:name', getProductById)
 
 

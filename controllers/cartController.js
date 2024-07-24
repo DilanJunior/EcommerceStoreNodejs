@@ -41,7 +41,7 @@ export const addController = async (req, res) => {
         return res.status(404).json({ message: "Product not found in cart" });
   
       // Llama al método deleteProduct en el documento del carrito
-      await cartItem.deleteProduct(quantity);
+      await cartItem.c(quantity);
   
       res.status(200).json({
         message: "Product quantity updated or removed from cart",
@@ -52,3 +52,5 @@ export const addController = async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   }
+
+  Cart.exports = {deleteController, }

@@ -28,30 +28,37 @@ const CarruselCategories = () => {
   ];
 
   return (
+
     <div className="w-auto m-auto py-4">
+      {/* <div className="flex items-center justify-between text-Zinc-700">
+        <div>
+          <h1 className="text-2xl font-bold">Categorías</h1>
 
+          <p className="text-sm font-bold leading-loose tracking-wide">
+            Texto de ejemplo con clases de tipografía.
+          </p>
+        </div>
+      </div> */}
 
-  <h1 className="font-bold text-xl ">Categorías</h1>
-    <div className="mb-8 flex flex-wrap gap-2">
-      {categories.map((category, index) => (
-        <div key={index} className="relative p-4 w-full sm:w-1/4 lg:w-2/2">
-          <div className="relative">
-            <img
-              src="https://via.placeholder.com/200x100"
-              alt={category}
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <div className="absolute inset-0 flex items-center justify-center rounded-lg">
-              <h2 className="absolute text-center text-lg font-bold text-white p-2 left-2 bottom-2  bg-black bg-opacity-50 rounded-sm">
-                {category}
-              </h2>
+      <div className="mb-8 grid grid-cols-2 md:flex md:items-center md:justify-center md:gap-2">
+        {categories.map((category, index) => (
+          <div key={index} className="relative p-4 w-full sm:w-1/4 lg:w-2/2">
+            <div className="relative">
+              <img
+                src="https://via.placeholder.com/200x100"
+                alt={category}
+                className="w-full h-full object-cover rounded-xl"
+              />
+              <div className="absolute inset-0 flex items-center justify-center rounded-lg">
+                <h2 className="absolute text-center text-lg font-bold text-white p-2 left-2 bottom-2 bg-black bg-opacity-50 rounded-sm">
+                  {category}
+                </h2>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-  
   );
 };
 

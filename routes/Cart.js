@@ -1,14 +1,17 @@
 import Cart from "../models/cartdb.js"; // Asegúrate de que la ruta sea correcta
-import {limitCartItems} from "../middleware/cartLimit.js";
+import { limitCartItems } from "../middleware/cartLimit.js";
 import express from "express";
-import {addController, deleteController} from "../controllers/cartController.js";
+import {
+  addController,
+  deleteController,
+} from "../controllers/cartController.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res)  => {
+router.get("/", async (req, res) => {
   try {
     const CartItems = await Cart.find();
-   
+
     res.json({ MyCart: CartItems });
   } catch (err) {
     console.log("No funciona la obtencion del carrito");
@@ -16,15 +19,11 @@ router.get("/", async (req, res)  => {
   }
 });
 
-
-
-router.get('/GetCartItem', async function (req, res) {
-
+router.get("/GetCartItem", async function (req, res) {
   const countItems = await Cart.find();
-   
-    res.json({ MyCart: countItems });
 
-})
+  res.json({ MyCart: countItems });
+});
 
 router.post("/add", limitCartItems, addController);
 
