@@ -1,7 +1,6 @@
-import express from "express";
+
+import mongoose, { mongo } from "mongoose";
 import Product from "../models/Product.js";
-
-
 
 export const getProducts = async (req, res) => {
   try {
@@ -13,7 +12,7 @@ export const getProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { name, price, description } = req.body;
+  const { name, price, description, category } = req.body;
   const imageUrl = req.file ? req.file.filename : "";
   console.log(req.file)
   
@@ -21,12 +20,16 @@ export const createProduct = async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
+  if(!mongoose.Types.ObjectId.isValid(category)){
+    return res.status(400).json({ message: "Invalid category ID" });
+  }
 
   const product = new Product({
     name,
     price,
     description,
     imageUrl, 
+    category,
   });
 
   try {

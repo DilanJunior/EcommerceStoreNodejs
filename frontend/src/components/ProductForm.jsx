@@ -1,23 +1,28 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useCategories } from "./ListProductCategories";
 
 const AddProduct = () => {
+  const { categories, error } = useCategories();
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
- 
+  const [category, setcategory] = useState("");
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      console.log(image)
+      console.log(image);
       const formData = new FormData();
       formData.append("name", name);
       formData.append("price", price);
       formData.append("description", description);
       formData.append("image", image);
+      formData.append("category", category);
+
+      if (category) console.log(category);
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/products`,
@@ -28,11 +33,11 @@ const AddProduct = () => {
           },
         }
       );
-      window.location.href = '/';
+      window.location.href = "/";
       alert("Product added successfully!");
     } catch (error) {
       alert(error.response?.data.message || error.message);
-      
+
       console.error("Error:", error.response?.data || error.message);
     }
   };
@@ -77,6 +82,27 @@ const AddProduct = () => {
                   className="mt-1 p-2 w-full border bg-gray-400 border-gray-300 rounded-md placeholder-gray-500 "
                 />
               </div>
+
+              <div className="mb-4">
+                <label htmlFor="categories" className="block text-gray-700">
+                  Selecciona una categoría:
+                </label>
+                <select
+                  id="categories"
+                  name="category"
+                  value={category}
+                  onChange={(e) => setcategory(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg"
+                  required  
+                >
+                  <option value="">Seleccione una categoría</option>
+                  {categories.map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <button
                 type="submit"
                 className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
@@ -90,84 +116,5 @@ const AddProduct = () => {
     </>
   );
 };
-
-function Cart() {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "Item 1", price: 29.99, quantity: 1 },
-    { id: 2, name: "Item 2", price: 49.99, quantity: 2 },
-  ]);
-  const handleQuantityChange = (id, quantity) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: quantity } : item
-      )
-    );
-  };
-
-  return (
-    <>
-      <div className="max-w-4xl mx-auto text-gray-600 bg-gray-50">
-        <h1 className="text-2xl font-bold p-4 border-b">Articulos</h1>
-
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 bg-gray-50">Producto</th>
-                <th className="px-6 py-3 bg-gray-50">Cantidad</th>
-                <th className="px-6 py-3 bg-gray-50 text-right">Precio</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {cartItems.map((item) => (
-                <tr key={item.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      min="1"
-                      onChange={(e) =>
-                        handleQuantityChange(item.id, parseInt(e.target.value))
-                      }
-                      className="border rounded px-2 py-1 w-20"
-                    />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className=" bg-white rounded p-6">
-          <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-          <div className="mb-2 flex justify-between">
-            <span className="font-medium">Original Price</span>
-            <span>$6,592.00</span>
-          </div>
-          <div className="mb-2 flex justify-between">
-            <span className="font-medium">Savings</span>
-            <span className="text-red-500">-$299.00</span>
-          </div>
-          <div className="mb-2 flex justify-between">
-            <span className="font-medium">Store Pickup</span>
-            <span>$99.00</span>
-          </div>
-          <div className="mb-2 flex justify-between">
-            <span className="font-medium">Tax</span>
-            <span>$799.00</span>
-          </div>
-          <div className="mt-4 flex justify-between border-t pt-2">
-            <span className="font-semibold text-lg">Total</span>
-            <span className="font-semibold text-lg">$7,191.00</span>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
 
 export default AddProduct;

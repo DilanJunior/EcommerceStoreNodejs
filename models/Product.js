@@ -12,8 +12,14 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   description: String,
-
   imageUrl: String, // Buffer para la imagen
+
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+  },
+  
 });
 
 //Metohodos
@@ -43,4 +49,5 @@ ProductSchema.methods.existImage = function () {
   }
 };
 
-export default mongoose.model("Product", ProductSchema);
+const Product = mongoose.model("Product", ProductSchema);
+export default Product;
