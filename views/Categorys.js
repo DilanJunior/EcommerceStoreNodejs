@@ -18,11 +18,13 @@ const uploadCategoryImages = multer({ storage: storageCategories });
 
 router.get("/", async (req, res) => {
   try {
-    const Categories = await Category.find();
+    const Categories = await Category.findAll();
 
     const promises = Categories.map(async (category) => {
-      const ProductCategoryList = await Product.find({
-        category: category._id,
+      const ProductCategoryList = await Product.findAll({ where : {
+        CategoryId: category.id
+      }
+       
       });
 
       return {

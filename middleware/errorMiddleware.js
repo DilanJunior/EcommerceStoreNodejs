@@ -1,5 +1,5 @@
 const errorMiddleware = (err, req, res, next) => {
-  statusCode = err.statusCode || 500;
+ /*  statusCode = err.statusCode || 500;
 
   const response = {
     success: false,
@@ -10,6 +10,7 @@ const errorMiddleware = (err, req, res, next) => {
   console.error(err.stack);
 
   // Enviar la respuesta al cliente
-  res.status(statusCode).json(response);
+  res.status(statusCode).json(response); */
+  console.log('hi')
 };
 export default errorMiddleware;

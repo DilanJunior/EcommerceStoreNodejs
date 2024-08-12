@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
+import Slider from "react-slick";
+import ListProductCategories from "../components/ListProductCategories";
 
-import ProductList from "./ProductList";
+import ProductList from "../components/Home/ProductList";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,10 +15,10 @@ import {
   faArrowRight,
   faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
-import AdBanner from "./AdBanner";
-import { spread } from "axios";
+import AdBanner from "../components/Home/AdBanner";
+
 import "./header.css";
-import CarruselCategories from "./Categories";
+import CarruselCategories from "../components/Home/Categories";
 
 const generateRandomPosition = () => {
   const top = Math.floor(Math.random() * 80);
@@ -41,99 +43,130 @@ const spheres = Array.from({ length: 3 }, (_, i) => (
 function MainContent({ searchQuery = "" }) {
   return (
     <>
-      <AdBanner />
+      <div className="z-10">
+        <AdBanner />
 
-      <div className="px-4">
         <CarruselCategories />
 
-        <div className="flex items-center justify-between ">
-          <div className="">
-            <h1 className="text-xl font-bold text-red-500 ">
-              Nuestro catálogo
-            </h1>
-          </div>
-
-          <button onClick={() => window.location.href = '/Categor%C3%ADa'} className="bg-transparent flex gap-2 items-center  m-0 font-bold py-2 px-4 rounded-md hover:bg-red-600 hover:text-white transition duration-300">
-            Ver más
-            <FontAwesomeIcon icon={faArrowRight} />
-          </button>
-        </div>
-
-        <div className="relative w-full">
-          <div className="absolute w-full h-full opacity-50 z-0  "></div>
-          <div className="absolute w-full h-full opacity-50 z-0"></div>
-          {/*  {spheres} */}
-
-          <ProductList searchQuery={searchQuery} />
-        </div>
+        <ProductList searchQuery={searchQuery} />
       </div>
 
-      <br />
-      <br />
-      <footer className="bg-gray-800 text-white py-4 px-3 border-b-white ">
-        <div className=" mx-auto flex flex-col items-center justify-center">
-
-          <div className="w-full md:w-4/12 p-2 text-center">
-            <h2 className="text-white font-bold text-2xl mb-2">
-              Suscríbete a nuestro boletín
-            </h2>
-            <p className="mb-4 text-gray-400">
-              Recibe las últimas novedades y ofertas directamente en tu correo.
-            </p>
-            <form
-              /* onSubmit={handleSubmit}  */ className="w-full flex items-center md:flex-nowrap flex-wrap gap-2 p-1 rounded-md"
+      <div className="w-full p-4 text-center flex flex-col items-center">
+        <h2 className="text-gray-800 font-bold text-2xl mb-2">
+          Suscríbete a nuestro boletín
+        </h2>
+        <p className="mb-4 text-gray-700">
+          Recibe las últimas novedades y ofertas directamente en tu correo.
+        </p>
+        <form className="w-full flex items-center md:w-4/12 md:flex-nowrap flex-wrap gap-2 p-1 relative rounded-md">
+          <div className="relative w-full">
+            <FontAwesomeIcon
+              icon={faEnvelope}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            />
+            <input
+              id="email"
+              type="email"
+              className="block w-full pl-10 pr-10 py-2 border text-gray-800 border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
+              placeholder="Tu email"
+            />
+            <button
+              type="submit"
+              className="absolute right-0 top-0 bottom-0 m-0 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700"
             >
-              <div className="relative w-full">
-                <FontAwesomeIcon
-                  icon={faEnvelope}
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                />
-                <input
-                  id="email"
-                  type="email"
-                  //value={email}
-                  // onChange={(e) => setEmail(e.target.value)}
-                  className="m-0 block w-full pl-10 pr-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  required
-                  placeholder="Tu email"
-
-                />
-              </div>
-              <button
-                type="submit"
-                className="m-0 py-2 px-4 border block border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Suscribirse
-              </button>
-            </form>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </button>
           </div>
+        </form>
+      </div>
 
-         
-        </div>
+      <footer className="bg-gray-800 text-white mt-2 px-3 border-b-white ">
+        <div className=" mx-auto flex flex-col items-center justify-center"></div>
       </footer>
 
-      <div className="flex py-2 px-3 text-center md:items-center md:justify-between bg-gray-800 text-white justify-center">
-        <p className="text-sm ">
+      <div className="flex flex-wrap py-2 px-3 text-center md:items-center md:justify-between bg-gray-800 text-white justify-center">
+        <div className="flex space-x-4 my-4">
+          <a href="#" className="hover:text-gray-400">
+            Facebook
+          </a>
+          <a href="#" className="hover:text-gray-400">
+            Twitter
+          </a>
+          <a href="#" className="hover:text-gray-400">
+            Instagram
+          </a>
+          <a href="#" className="hover:text-gray-400"></a>
+        </div>
+
+        <p className="text-sm w-auto ">
           &copy; {new Date().getFullYear()} Bisutería Jacky.
         </p>
-
-        <div className="flex space-x-4 my-4">
-            <a href="#" className="hover:text-gray-400">
-              Facebook
-            </a>
-            <a href="#" className="hover:text-gray-400">
-              Twitter
-            </a>
-            <a href="#" className="hover:text-gray-400">
-              Instagram
-            </a>
-            <a href="#" className="hover:text-gray-400"></a>
-          </div>
       </div>
     </>
   );
 }
 
+const Textslider = () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 10000,
+  };
+
+  return (
+    <div className="w-full p-5">
+      <Slider>
+        <div>
+          <h3>Texto 1</h3>
+        </div>
+        <div>
+          <h3>Texto 2</h3>
+        </div>
+        <div>
+          <h3>Texto 3</h3>
+        </div>
+        <div>
+          <h3>Texto 4</h3>
+        </div>
+      </Slider>
+    </div>
+  );
+};
+
+const SecondGallery = () => {
+  const images = [
+    "https://via.placeholder.com/300x200",
+    "https://via.placeholder.com/300x200",
+    "https://via.placeholder.com/300x200",
+    "https://via.placeholder.com/300x200",
+  ];
+
+  return (
+    <div className="grid grid-flow-col grid-rows-3" style={{ height: "500px" }}>
+      {images.map((src, index) => (
+        <div
+          key={index}
+          className={`p-1 ${
+            index === 0 || index == 3
+              ? "row-span-2 col-span-1"
+              : "row-span-1 col-span-2"
+          }`}
+        >
+          <img
+            src={src}
+            alt={`Gallery Image ${index}`}
+            className={`w-full h-full object-cover rounded-lg`}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export function Cart() {
   const [cartItems, setCartItems] = useState([
@@ -213,7 +246,5 @@ export function Cart() {
     </>
   );
 }
-
-
 
 export default MainContent;

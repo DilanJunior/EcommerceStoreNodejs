@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecret';
+export const JWT_SECRET = process.env.JWT_SECRET || 'defaultSecret';
 
 export function createUserToken(payload){
     if (!payload || typeof payload ===! 'object') {

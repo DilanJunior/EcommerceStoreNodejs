@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useCategories } from "./ListProductCategories";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useCategories from "../api/categories";
+import { postCreateProduct } from "../api/products";
 
 const AddProduct = () => {
-  const { categories, error } = useCategories();
+  const { data, isLoading, isError, error } = useCategories();
+
+  const categories = data?.category || [];
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -11,40 +14,40 @@ const AddProduct = () => {
   const [image, setImage] = useState(null);
   const [category, setcategory] = useState("");
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: postCreateProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries("products");
+    },
+  });
+
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      console.log(image);
+
       const formData = new FormData();
+      
       formData.append("name", name);
       formData.append("price", price);
       formData.append("description", description);
       formData.append("image", image);
       formData.append("category", category);
 
-      if (category) console.log(category);
-
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/products`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      window.location.href = "/";
-      alert("Product added successfully!");
+      mutation.mutate({ formData });
     } catch (error) {
       alert(error.response?.data.message || error.message);
 
       console.error("Error:", error.response?.data || error.message);
     }
   };
+
   return (
     <>
+    <a href="http://localhost:5173/" className="rounded-sm bg-slate-500 text-center px-2 py-1">Inicio</a>
+     
       <div className="max-w-md mx-auto bg-slate-500 shadow-md rounded-lg overflow-hidden md:max-w-lg mt-3">
-        <div className="md:flex">
+         <div className="md:flex">
           <div className="w-full p-4">
             <h2 className="text-2xl font-bold mb-4">Add a New Product</h2>
             <form onSubmit={handleSubmit}>
@@ -93,11 +96,11 @@ const AddProduct = () => {
                   value={category}
                   onChange={(e) => setcategory(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg"
-                  required  
+                  required
                 >
                   <option value="">Seleccione una categoría</option>
-                  {categories.map((item) => (
-                    <option key={item._id} value={item._id}>
+                  {categories?.map((item) => (
+                    <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
                   ))}
@@ -109,6 +112,12 @@ const AddProduct = () => {
               >
                 Add Product
               </button>
+
+              {mutation.isLoading && <p>Adding product...</p>}
+              {mutation.isError && (
+                <p>An error occurred: {mutation.error.message}</p>
+              )}
+              {mutation.isSuccess && <p>Product added successfully!</p>}
             </form>
           </div>
         </div>

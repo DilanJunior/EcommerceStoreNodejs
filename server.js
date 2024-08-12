@@ -1,10 +1,11 @@
 import express from "express";
-import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+
 import dotenv from "dotenv";
-import ProductRoutes from "./routes/Products.js";
-import UserRoutes from "./routes/Users.js";
-import CartRoutes from "./routes/Cart.js";
-import CategoryRoutes from "./routes/Categorys.js";
+import ProductRoutes from "./views/Products.js";
+import UserRoutes from "./views/Users.js";
+import CartRoutes from "./views/Cart.js";
+import CategoryRoutes from "./views/Categorys.js";
 import Category from "./models/Category.js";
 import cors from "cors";
 import chalk from "chalk";
@@ -13,11 +14,12 @@ import notFoundHandler from "./middleware/notFoundHandler.js";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 
+import { Sequelize } from "sequelize";
+import { serialize } from "v8";
+import sequelize from "./db.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-
 
 dotenv.config();
 const app = express();
@@ -33,22 +35,12 @@ app.use(
   })
 );
 
+// Express Middleware
+
+app.use(express.json());
+app.use(cookieParser());
 app.use("/uploads/", express.static(path.join(__dirname, "uploads")));
 
-// Conectar a MongoDB
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log(chalk.blue("Database connected!")))
-  .catch((err) => console.log(err));
-
-// Rutas
-app.get("/api/", (req, res) => {
-  console.log(req);
-  res.send("Welcome to the clothing store API!");
-});
 
 app.use("/api/products/", ProductRoutes); // Montar las rutas de productos
 app.use("/api/users/", UserRoutes); // Montar las rutas de usuarios
@@ -56,7 +48,25 @@ app.use("/api/cart/", CartRoutes);
 app.use("/api/categories/", CategoryRoutes);
 
 
-app.use(notFoundHandler);
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log(chalk.blue("Conexión a MySQL establecida correctamente.")); 
+  })
+  .then(() => {
+   
+    app.listen(PORT, () => {
+      console.log(chalk.green(`Servidor corriendo en http://localhost:${PORT}`));
+    });
+  })
+  .catch((err) => {
+    console.error(chalk.red("No se pudo conectar a la base de datos:", err));
+  });
+
+  
+
+//app.use(notFoundHandler);
 
 const category = [
   "Anillos",
@@ -73,19 +83,21 @@ const category = [
 
 const sendCategories = async () => {
   try {
-    await Category.deleteMany({}); // Borra todas las categorías actuales
-    for (const item of category) {
-      const newCategory = new Category({ name: item });
-      await newCategory.save();
-    }
+
+  
+    await Category.destroy({ where: {} }); 
+
+    const promises = category.map(async (item) => {
+      return await Category.create({ name: item });
+    });
+
+    // Espera a que todas las promesas se resuelvan
+    await Promise.all(promises);
 
     console.log(chalk.green("Categorías importadas correctamente"));
   } catch (err) {
-    console.log(chalk.red("Error al importar categorías"));
+    console.log(chalk.red("Error al importar categorías:", err));
   }
 };
 
-app.listen(PORT, (err) => {
-  if (err) console.log(chalk.red("Error al iniciar el servidor:", err));
-  else console.log(chalk.green(`Server is running on port ${PORT}`));
-});
+//sendCategories()

@@ -5,6 +5,9 @@ const { argon2 } = pkg;
 import { register, login, logout , getUserProfile} from "../controllers/authController.js";
 import {authMidlleware} from "../middleware/validatetoken.js"
 
+import multer from "multer";
+const upload = multer()
+
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -16,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/register", register);
+router.post("/register", upload.none(), register);
 router.post("/login", login);
 router.post("/logout", logout);
 router.get("/profile", authMidlleware , getUserProfile);

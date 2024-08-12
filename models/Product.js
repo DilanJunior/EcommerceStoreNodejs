@@ -1,53 +1,50 @@
-import mongoose, { mongo } from "mongoose";
-import path from "path";
-import fs from "fs";
+import { DataTypes } from 'sequelize';
+import path from 'path';
+import fs from 'fs';
+import sequelize from '../db.js';
+import Category from './Category.js'; // Importa el modelo de Category
 
-const ProductSchema = new mongoose.Schema({
+const Product = sequelize.define('Product', {
   name: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   price: {
-    type: Number,
-    required: true,
+    type: DataTypes.FLOAT,
+    allowNull: false,
   },
-  description: String,
-  imageUrl: String, // Buffer para la imagen
-
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true,
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
-  
+  imageUrl: {
+    type: DataTypes.STRING, // Almacena la ruta de la imagen como una cadena
+    allowNull: true,
+  },
+}, {
+  tableName: 'products',  // Nombre de la tabla en la base de datos
+  timestamps: true,       // Crea automáticamente createdAt y updatedAt
 });
 
-//Metohodos
-ProductSchema.pre("remove", function (next) {
-  if (this.imageUrl) {
-    
-    const UrlImage = path.join(__dirname, "uploads", this.imageUrl);
+// Definir la relación entre Product y Category
+Product.belongsTo(Category, {
+  foreignKey: {
+    allowNull: false,
+  }
+});
 
+// Método para eliminar la imagen antes de borrar el registro
+Product.beforeDestroy(async (product, options) => {
+  if (product.imageUrl) {
+    const imagePath = path.join(__dirname, 'uploads', product.imageUrl);
+    
     fs.unlink(imagePath, (err) => {
       if (err) {
-        console.error("Error al eliminar la imagen:", err);
-        // Pasar el error al manejador de errores
-        next(err);
-      } else {
-        // Continuar con la eliminación del documento
-        next();
+        console.error('Error al eliminar la imagen:', err);
+        throw err; // Lanzar el error para que se maneje adecuadamente
       }
     });
   }
 });
 
-ProductSchema.methods.existImage = function () {
-  if (!this.imageUrl) {
-    return "Imagen no posee una imagen";
-  } else {
-    return "Imagen disponible";
-  }
-};
-
-const Product = mongoose.model("Product", ProductSchema);
 export default Product;
