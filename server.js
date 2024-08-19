@@ -1,6 +1,5 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-
 import dotenv from "dotenv";
 import ProductRoutes from "./views/Products.js";
 import UserRoutes from "./views/Users.js";
@@ -9,13 +8,8 @@ import CategoryRoutes from "./views/Categorys.js";
 import Category from "./models/Category.js";
 import cors from "cors";
 import chalk from "chalk";
-import errorMiddleware from "./middleware/errorMiddleware.js";
-import notFoundHandler from "./middleware/notFoundHandler.js";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
-
-import { Sequelize } from "sequelize";
-import { serialize } from "v8";
 import sequelize from "./db.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,9 +23,10 @@ console.log(chalk.yellow(__dirname));
 
 app.use(
   cors({
-    origin: "*", // URL del frontend con Vite
+    origin: "http://localhost:5173", // URL del frontend con Vite
     methods: "GET,POST,PUT,DELETE", // Métodos permitidos
     allowedHeaders: "Content-Type,Authorization", // Cabeceras permitidas
+    credentials: true,
   })
 );
 
@@ -41,30 +36,26 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads/", express.static(path.join(__dirname, "uploads")));
 
-
 app.use("/api/products/", ProductRoutes); // Montar las rutas de productos
 app.use("/api/users/", UserRoutes); // Montar las rutas de usuarios
 app.use("/api/cart/", CartRoutes);
 app.use("/api/categories/", CategoryRoutes);
 
-
-
 sequelize
   .authenticate()
   .then(() => {
-    console.log(chalk.blue("Conexión a MySQL establecida correctamente.")); 
+    console.log(chalk.blue("Conexión a MySQL establecida correctamente."));
   })
   .then(() => {
-   
     app.listen(PORT, () => {
-      console.log(chalk.green(`Servidor corriendo en http://localhost:${PORT}`));
+      console.log(
+        chalk.green(`Servidor corriendo en http://localhost:${PORT}`)
+      );
     });
   })
   .catch((err) => {
     console.error(chalk.red("No se pudo conectar a la base de datos:", err));
   });
-
-  
 
 //app.use(notFoundHandler);
 
@@ -83,9 +74,7 @@ const category = [
 
 const sendCategories = async () => {
   try {
-
-  
-    await Category.destroy({ where: {} }); 
+    await Category.destroy({ where: {} });
 
     const promises = category.map(async (item) => {
       return await Category.create({ name: item });
@@ -101,3 +90,6 @@ const sendCategories = async () => {
 };
 
 //sendCategories()
+
+
+ 

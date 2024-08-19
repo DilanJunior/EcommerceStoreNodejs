@@ -3,7 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 
 const fetchListProductCategories = async () => {
   try {
-    const { data } = await axios.get("http://localhost:3000/api/categories");
+   
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/categories`
+    );
+
     return data;
   } catch (error) {
     console.error("Error getting categories:", error.message);
@@ -16,6 +20,10 @@ export const useCategories = () => {
     queryKey: ["categories"],
     queryFn: fetchListProductCategories,
   });
+
+  if (isError) {
+    console.error("Error:", error.message);
+  }
 
   return { data, isLoading, isError, error };
 };

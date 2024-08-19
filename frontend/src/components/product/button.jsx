@@ -1,5 +1,5 @@
 const ButtonHover = (props) => {
-  const { text, icon, onclick, className } = props;
+  const { text, icon, onclick, cle } = props;
   return (
     <button
       onClick={onclick}

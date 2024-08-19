@@ -1,7 +1,7 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import "../Home/global.css";
+import "../../assets/style/global.css";
 //import Logo from ".../assets/images/Logo_B.jpg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

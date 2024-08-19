@@ -1,105 +1,105 @@
-import React, { useState } from "react";
 import axios from "axios";
-import { Mutation, useMutation } from "@tanstack/react-query";
-import AddNewRegister from "../../api/auth";
+import Cookies from "js-cookie";
+import React, { useState, useEffect } from "react";
 
-function RegisterForm() {
-  const [username, setUsername] = useState("");
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const mutation = useMutation({
-    mutationFn: AddNewRegister,
-    onSuccess: () => "Se agregó correctamente",
-    onError: (error) => {
-      console.error("Error al agregar el registro:", error);
-    },
-  });
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("password", password);
+  
+  const UserToken = Cookies.get('UserToken')
+  
 
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('email', email);
-    formData.append('password', password);
 
+    console.log(UserToken)
+    
+    axios
+      .post(`http://localhost:3000/api/users/login`, formData, {
+        withCredentials: true, 
+        headers: {
+          "Content-Type": "multipart/form-data",
+           Authorization: `Bearer ${UserToken}`
+        },
+      })
+      .then((response) => {
+        console.log(response);
 
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
+       // Cookies.set("token", response.data.token);
 
-    mutation.mutate(formData);
+        alert(response.data.message);
+      })
+     /*  .then(() => {
+        const Token = Cookies.get("token");
+        console.log(Token);
+      }) */
+      .catch((error) => {
+        console.log(error.message);
+        alert(error.message);
+      });
   };
+
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold text-center mb-8">Register</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
+      >
+        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label
-              htmlFor="username"
-              className="text-sm font-medium text-gray-700 mb-2"
-            >
-              Username:
-            </label>
-            <input
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
 
-          <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
 
+        <div className="flex items-center justify-between">
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Register
+            Sign In
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 }
 
-
-
-
-export default RegisterForm;
+export default LoginForm;

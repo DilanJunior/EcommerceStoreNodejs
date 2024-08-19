@@ -2,6 +2,8 @@ import User from "../models/Userdb.js";
 import pkg from "argon2";
 import { createUserToken } from "../utils/jwt.js";
 const { argon2 } = pkg;
+import sequelize from "../db.js";
+
 
 import multer from "multer";
 const upload = multer();
@@ -17,22 +19,18 @@ export const register = async (req, res) => {
   try {
     const hash = await pkg.hash(password);
 
-    const user = new User({
+    const user = await User.create({
       username,
       email,
       password: hash.toString(),
-      role: "user",
     });
-
-    const newUser = await user.save();
 
     const tokenUser = createUserToken({ username: username, email: email });
     res.cookie("token", tokenUser, { httpOnly: true });
 
     res.status(201).json({
-      id: newUser._id,
-      email: newUser.email,
-      username: newUser.username,
+      email: email,
+      username: username,
       tokenUser,
     });
   } catch (error) {
@@ -43,17 +41,20 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const isUser = await User.findOne({ email });
+  const isUser = await User.findOne({ where: { email: email } });
 
   if (!isUser) return res.status(401).json({ message: "User not found" });
 
   const valid = pkg.verify(isUser.password, password);
   if (!valid) return res.status(401).json({ message: "Invalid credentials" });
 
-  const UserToken = createUserToken({ email: email });
+  const UserToken = createUserToken({ email: email, role: isUser.role });
 
-  res.cookie("token", UserToken, { httpOnly: true });
-  res.status(200).json({ message: "Login successful" });
+  res.cookie("UserToken", UserToken, {
+    domain: "localhost",
+    path: "/",
+  });
+  res.status(200).json({ token: UserToken, message: "Login successful" });
 };
 
 export const logout = async (req, res) => {
@@ -62,8 +63,19 @@ export const logout = async (req, res) => {
 };
 
 export const getUserProfile = async (req, res) => {
-  const { email } = req.payload;
-  const user = await User.findOne({ email: email });
+  /* console.log(req.payload);
+  const { email, role } = req.payload;
+  const user = await User.findOne({ where: { email: email } });
+ */
+  try{
+    await sequelize.authenticate();
+    const [resultados] = await sequelize.query("SHOW TABLES");
+    console.log('Tablas en la base de datos:', resultados);
+    res.status(200).json({resultados})
+  }
+  catch(error){
+    console.log(error)
+  }
 
-  res.json({ message: "is profile available", user });
+  //res.json({ message: "is profile available", user });
 };

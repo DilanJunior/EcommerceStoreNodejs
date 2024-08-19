@@ -2,7 +2,9 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../utils/jwt.js";
 
 export const authMidlleware = (req, res, next) => {
-  const token = req.cookies.token;
+  
+  const token = req.cookies.UserToken;
+  console.log(req.cookies)
   if (!token) return res.status(401).json({ message: "missing token" });
 
   try {

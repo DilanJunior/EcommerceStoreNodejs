@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
 import Slider from "react-slick";
-import ListProductCategories from "../components/ListProductCategories";
-
-import ProductList from "../components/Home/ProductList";
+import ProductList from "../components/product/ProductList";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,10 +13,11 @@ import {
   faArrowRight,
   faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
-import AdBanner from "../components/Home/AdBanner";
+import AdBanner from "../components/product/AdBanner";
 
-import "./header.css";
-import CarruselCategories from "../components/Home/Categories";
+//import "..assets/styles/header.css";
+import CarruselCategories from "../components/product/Categories";
+import MainNavigation from "../layout/Navbar";
 
 const generateRandomPosition = () => {
   const top = Math.floor(Math.random() * 80);
@@ -40,9 +39,12 @@ const spheres = Array.from({ length: 3 }, (_, i) => (
   </div>
 ));
 
-function MainContent({ searchQuery = "" }) {
+function MainContent() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <>
+    <MainNavigation />
       <div className="z-10">
         <AdBanner />
 
@@ -81,28 +83,7 @@ function MainContent({ searchQuery = "" }) {
         </form>
       </div>
 
-      <footer className="bg-gray-800 text-white mt-2 px-3 border-b-white ">
-        <div className=" mx-auto flex flex-col items-center justify-center"></div>
-      </footer>
-
-      <div className="flex flex-wrap py-2 px-3 text-center md:items-center md:justify-between bg-gray-800 text-white justify-center">
-        <div className="flex space-x-4 my-4">
-          <a href="#" className="hover:text-gray-400">
-            Facebook
-          </a>
-          <a href="#" className="hover:text-gray-400">
-            Twitter
-          </a>
-          <a href="#" className="hover:text-gray-400">
-            Instagram
-          </a>
-          <a href="#" className="hover:text-gray-400"></a>
-        </div>
-
-        <p className="text-sm w-auto ">
-          &copy; {new Date().getFullYear()} Bisutería Jacky.
-        </p>
-      </div>
+      
     </>
   );
 }

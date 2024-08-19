@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useCategories from "../api/categories";
-import { postCreateProduct } from "../api/products";
+import useCategories from "../../api/categories";
+import { postCreateProduct } from "../../api/products";
 
 const AddProduct = () => {
   const { data, isLoading, isError, error } = useCategories();

@@ -2,7 +2,7 @@
 import express from 'express';
 import { getProducts, getProductById, createProduct} from '../controllers/ProductController.js'
 import multer from 'multer';
-import {jsonRateLimiter} from '../middleware/secureJsonAbuse.js'
+import AuthorizeRole from '../middleware/accessControlMiddleware.js'
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ const router = express.Router();
 const upload = multer({ storage: storage }); 
 
 
-router.get('/', jsonRateLimiter,  getProducts)
+router.get('/', getProducts)
 router.post('/', upload.single('image'), createProduct) 
 router.get('/:name', getProductById)
 

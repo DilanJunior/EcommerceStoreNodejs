@@ -2,6 +2,8 @@ import { Router } from "express";
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
 import multer from "multer";
+import { Op } from "sequelize";
+
 
 const router = Router();
 
@@ -21,8 +23,11 @@ router.get("/", async (req, res) => {
     const Categories = await Category.findAll();
 
     const promises = Categories.map(async (category) => {
-      const ProductCategoryList = await Product.findAll({ where : {
-        CategoryId: category.id
+      const ProductCategoryList = await Product.findAll({  where: {
+        CategoryId: category.id,
+        imageUrl: {
+          [Op.ne]: "" // Asegura que imageUrl no esté vacío
+        }
       }
        
       });
